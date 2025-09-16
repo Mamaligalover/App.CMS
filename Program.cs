@@ -8,6 +8,7 @@ using App.CMS.Application.Common.Behaviours;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
+builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 
 // Configure PostgreSQL Database
@@ -54,8 +55,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
 app.UseCors("AllowAll");
 app.UseAuthorization();
+
+app.MapRazorPages();
 app.MapControllers();
 
 // Apply database migrations and seed data

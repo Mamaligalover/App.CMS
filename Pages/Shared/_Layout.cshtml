@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - App CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50">
+    <header>
+        <nav class="bg-gray-900 text-white shadow-lg">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <a asp-page="/Index" class="flex items-center space-x-2 text-xl font-bold">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                            <span>App CMS</span>
+                        </a>
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a asp-page="/Index" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                            <a asp-page="/About" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                            <a asp-page="/Contact" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="/swagger" target="_blank" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                            API Docs
+                        </a>
+                        <a href="#" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-1">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h5 class="text-xl font-bold mb-4">App CMS</h5>
+                    <p class="text-gray-300">A modern content management system built with ASP.NET Core and PostgreSQL.</p>
+                </div>
+                <div>
+                    <h6 class="text-lg font-semibold mb-3">Quick Links</h6>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-300 hover:text-white">Home</a></li>
+                        <li><a href="/swagger" class="text-gray-300 hover:text-white">API Documentation</a></li>
+                        <li><a href="/Privacy" class="text-gray-300 hover:text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="text-lg font-semibold mb-3">Technologies</h6>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>ASP.NET Core 8.0</li>
+                        <li>Entity Framework Core</li>
+                        <li>PostgreSQL</li>
+                        <li>MediatR CQRS</li>
+                        <li>Tailwind CSS</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-gray-700 my-6">
+            <div class="text-center text-gray-300">
+                <p>&copy; 2024 App CMS. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
