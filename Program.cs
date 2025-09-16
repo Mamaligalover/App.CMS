@@ -5,6 +5,8 @@ using FluentValidation;
 using MediatR;
 using App.CMS.Application.Common.Behaviours;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using App.CMS.Application.Configuration;
+using App.CMS.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +63,12 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // Register Authentication Service
 builder.Services.AddScoped<App.CMS.Application.Services.IAuthenticationService, App.CMS.Application.Services.AuthenticationService>();
+
+// Configure MinIO Settings
+builder.Services.Configure<MinIOSettings>(builder.Configuration.GetSection("MinIO"));
+
+// Register File Storage Service
+builder.Services.AddSingleton<IFileStorageService, MinIOFileStorageService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>

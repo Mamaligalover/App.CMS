@@ -15,6 +15,9 @@ public class Category
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
+    public Guid? IconId { get; set; }
+    public Media? Icon { get; set; }
+
     public ICollection<Category> SubCategories { get; set; } = new List<Category>();
     public ICollection<Content> Contents { get; set; } = new List<Content>();
 }

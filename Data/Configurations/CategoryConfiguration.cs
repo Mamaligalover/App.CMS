@@ -49,7 +49,13 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasForeignKey(c => c.ParentCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(c => c.Icon)
+            .WithOne()
+            .HasForeignKey<Category>(c => c.IconId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         builder.HasIndex(c => c.ParentCategoryId);
+        builder.HasIndex(c => c.IconId).IsUnique();
         builder.HasIndex(c => c.Level);
         builder.HasIndex(c => c.DisplayOrder);
         builder.HasIndex(c => c.IsActive);
