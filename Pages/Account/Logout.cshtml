@@ -1,0 +1,15 @@
+@page
+@model App.CMS.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 text-center">
+        <h2 class="text-3xl font-extrabold text-gray-900">You have been logged out</h2>
+        <p class="mt-2 text-sm text-gray-600">Thank you for using App CMS.</p>
+        <a asp-page="/Index" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+            Return to Home
+        </a>
+    </div>
+</div>

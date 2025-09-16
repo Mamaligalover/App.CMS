@@ -4,12 +4,42 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using MediatR;
 using App.CMS.Application.Common.Behaviours;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizePage("/Admin");
+    options.Conventions.AuthorizeFolder("/Admin");
+});
 builder.Services.AddControllers();
+
+// Add anti-forgery token protection
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
+
+// Configure Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+        options.SlidingExpiration = true;
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+    });
+
+builder.Services.AddAuthorization();
 
 // Configure PostgreSQL Database
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -28,6 +58,9 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBeh
 
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+// Register Authentication Service
+builder.Services.AddScoped<App.CMS.Application.Services.IAuthenticationService, App.CMS.Application.Services.AuthenticationService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -58,6 +91,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("AllowAll");
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

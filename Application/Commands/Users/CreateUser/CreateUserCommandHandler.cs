@@ -4,7 +4,7 @@ using App.CMS.Data.Entities;
 
 namespace App.CMS.Application.Commands.Users.CreateUser;
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
+public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
 {
     private readonly AppDbContext _context;
 
@@ -13,7 +13,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
         _context = context;
     }
 
-    public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = new User
         {

@@ -4,12 +4,12 @@ namespace App.CMS.Application.Queries.Users.GetUser;
 
 public class GetUserQuery : IRequest<UserDto>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 }
 
 public class UserDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Username { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
