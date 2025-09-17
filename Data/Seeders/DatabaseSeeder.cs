@@ -70,30 +70,6 @@ public static class DatabaseSeeder
                 Console.WriteLine($"Seeded {categories.Count} categories.");
             }
 
-            // Seed sample content if not exists
-            if (!await context.Contents.AnyAsync())
-            {
-                var adminUser = await context.Users.FirstAsync(u => u.Email == "admin@admin.com");
-                var techCategory = await context.Categories.FirstAsync(c => c.Slug == "technology");
-
-                var sampleContent = new Content
-                {
-                    Title = "Welcome to App CMS",
-                    Slug = "welcome-to-app-cms",
-                    Body = "This is a sample content created by the database seeder. You can edit or delete this content.",
-                    Summary = "Welcome to your new CMS platform built with .NET 8 and PostgreSQL.",
-                    Status = ContentStatus.Published,
-                    CreatedAt = DateTime.UtcNow,
-                    PublishedAt = DateTime.UtcNow,
-                    AuthorId = adminUser.Id,
-                    CategoryId = techCategory.Id
-                };
-
-                context.Contents.Add(sampleContent);
-                await context.SaveChangesAsync();
-
-                Console.WriteLine("Sample content created successfully.");
-            }
 
             Console.WriteLine("Database seeding completed successfully!");
         }

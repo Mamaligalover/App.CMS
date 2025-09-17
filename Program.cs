@@ -13,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddRazorPages(options =>
 {
+    options.Conventions.AuthorizeFolder("/");
+    options.Conventions.AllowAnonymousToPage("/Account/Login");
+    options.Conventions.AllowAnonymousToPage("/Account/AccessDenied");
     options.Conventions.AuthorizePage("/Admin");
     options.Conventions.AuthorizeFolder("/Admin");
 });
@@ -105,6 +108,19 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
+
+// Redirect root to dashboard for authenticated users, login for anonymous
+app.MapGet("/", async context =>
+{
+    if (context.User?.Identity?.IsAuthenticated == true)
+    {
+        context.Response.Redirect("/Dashboard");
+    }
+    else
+    {
+        context.Response.Redirect("/Account/Login");
+    }
+});
 
 // Apply database migrations and seed data
 using (var scope = app.Services.CreateScope())

@@ -19,5 +19,4 @@ public class Category
     public Media? Icon { get; set; }
 
     public ICollection<Category> SubCategories { get; set; } = new List<Category>();
-    public ICollection<Content> Contents { get; set; } = new List<Content>();
 }

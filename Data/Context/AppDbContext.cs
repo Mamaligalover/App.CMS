@@ -10,7 +10,6 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
-    public DbSet<Content> Contents { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Media> Media { get; set; }
 
