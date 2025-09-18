@@ -53,13 +53,13 @@ public class EditModel : PageModel
         public Language Language { get; set; }
 
         [StringLength(500)]
-        public string TranslatedText { get; set; } = string.Empty;
+        public string? TranslatedText { get; set; }
 
         [StringLength(200)]
         public string? Pronunciation { get; set; }
 
         [StringLength(1500)]
-        public string Definition { get; set; } = string.Empty;
+        public string? Definition { get; set; }
 
         [StringLength(1000)]
         public string? UsageExample { get; set; }

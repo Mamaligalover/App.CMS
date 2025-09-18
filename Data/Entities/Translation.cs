@@ -14,16 +14,14 @@ public class Translation
     [Required]
     public Language Language { get; set; }
 
-    [Required]
     [MaxLength(500)]
-    public string TranslatedText { get; set; } = string.Empty;
+    public string? TranslatedText { get; set; }
 
     [MaxLength(200)]
     public string? Pronunciation { get; set; }
 
-    [Required]
     [MaxLength(1500)]
-    public string Definition { get; set; } = string.Empty;
+    public string? Definition { get; set; }
 
     [MaxLength(1000)]
     public string? UsageExample { get; set; }

@@ -16,14 +16,12 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
             .HasDefaultValueSql("gen_random_uuid()");
 
         builder.Property(t => t.TranslatedText)
-            .IsRequired()
             .HasMaxLength(500);
 
         builder.Property(t => t.Pronunciation)
             .HasMaxLength(200);
 
         builder.Property(t => t.Definition)
-            .IsRequired()
             .HasMaxLength(1500);
 
         builder.Property(t => t.UsageExample)
