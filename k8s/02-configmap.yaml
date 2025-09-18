@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-cms-config
+  namespace: app-cms
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:8080"
+  ConnectionStrings__DefaultConnection: "Host=postgres-service;Port=5432;Database=appcms;Username=appcms;Password=appcms123"
+  MinIO__Endpoint: "minio-service:9000"
+  MinIO__UseSSL: "false"
+  MinIO__BucketName: "app-cms"

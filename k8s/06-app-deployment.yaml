@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-cms
+  namespace: app-cms
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-cms
+  template:
+    metadata:
+      labels:
+        app: app-cms
+    spec:
+      containers:
+      - name: app-cms
+        image: codbun/app-cms:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: app-cms-config
+        env:
+        - name: MinIO__AccessKey
+          valueFrom:
+            secretKeyRef:
+              name: app-cms-secret
+              key: minio-root-user
+        - name: MinIO__SecretKey
+          valueFrom:
+            secretKeyRef:
+              name: app-cms-secret
+              key: minio-root-password
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox:1.36
+        command: ['sh', '-c', 'until nc -z postgres-service 5432; do echo waiting for postgres; sleep 2; done']
+      - name: wait-for-minio
+        image: busybox:1.36
+        command: ['sh', '-c', 'until nc -z minio-service 9000; do echo waiting for minio; sleep 2; done']
