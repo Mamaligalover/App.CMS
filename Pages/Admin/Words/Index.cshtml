@@ -1,0 +1,118 @@
+@page
+@model App.CMS.Pages.Admin.Words.IndexModel
+@{
+    ViewData["Title"] = "Words";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Words</h1>
+        <a asp-page="Create" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">
+            <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            New Word
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6">
+            <p class="text-green-700">@TempData["Success"]</p>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+            <p class="text-red-700">@TempData["Error"]</p>
+        </div>
+    }
+
+    <div class="mb-4">
+        <form method="get" class="flex gap-4">
+            <select name="categoryId" asp-items="Model.Categories" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">All Categories</option>
+            </select>
+            <button type="submit" class="bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300 transition">Filter</button>
+        </form>
+    </div>
+
+    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Term</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Definition</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Part of Speech</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difficulty</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach (var word in Model.Words)
+                {
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">@word.Term</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900 max-w-xs truncate">-</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-500">@word.CategoryName</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-500">@(word.PartOfSpeech ?? "-")</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @switch(word.Difficulty)
+                            {
+                                case App.CMS.Data.Enums.WordDifficulty.Easy:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Easy</span>
+                                    break;
+                                case App.CMS.Data.Enums.WordDifficulty.Medium:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Medium</span>
+                                    break;
+                                case App.CMS.Data.Enums.WordDifficulty.Hard:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Hard</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @switch(word.Status)
+                            {
+                                case App.CMS.Data.Enums.WordStatus.Draft:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Draft</span>
+                                    break;
+                                case App.CMS.Data.Enums.WordStatus.Pending:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                    break;
+                                case App.CMS.Data.Enums.WordStatus.Published:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Published</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a asp-page="Details" asp-route-id="@word.Id" class="text-blue-600 hover:text-blue-900 mr-4">View</a>
+                            <a asp-page="Edit" asp-route-id="@word.Id" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
+                            <form method="post" asp-page-handler="Delete" asp-route-id="@word.Id" class="inline"
+                                  onsubmit="return confirm('Are you sure you want to delete this word?');">
+                                <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (!Model.Words.Any())
+        {
+            <div class="text-center py-8">
+                <p class="text-gray-500">No words found.</p>
+            </div>
+        }
+    </div>
+</div>

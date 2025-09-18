@@ -12,6 +12,8 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Media> Media { get; set; }
+    public DbSet<Word> Words { get; set; }
+    public DbSet<Translation> Translations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

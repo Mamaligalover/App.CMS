@@ -1,0 +1,133 @@
+@page "{id:guid}"
+@model App.CMS.Pages.Admin.Words.DetailsModel
+@{
+    ViewData["Title"] = "Word Details";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="mb-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-900">Word Details</h1>
+            <div class="space-x-2">
+                <a asp-page="Translations" asp-route-id="@Model.Word.Id" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">Manage Translations</a>
+                <a asp-page="Edit" asp-route-id="@Model.Word.Id" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">Edit</a>
+                <a asp-page="Index" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">Back to List</a>
+            </div>
+        </div>
+
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h2 class="text-3xl font-bold text-gray-900">@Model.Word.Term</h2>
+            </div>
+
+            <div class="border-t border-gray-200">
+                <dl>
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Part of Speech</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">@(Model.Word.PartOfSpeech ?? "Not specified")</dd>
+                    </div>
+
+
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Category</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">@Model.Word.CategoryName</dd>
+                    </div>
+                    
+
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Status</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            @switch(Model.Word.Status)
+                            {
+                                case App.CMS.Data.Enums.WordStatus.Draft:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Draft</span>
+                                    break;
+                                case App.CMS.Data.Enums.WordStatus.Pending:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                    break;
+                                case App.CMS.Data.Enums.WordStatus.Published:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Published</span>
+                                    break;
+                            }
+                        </dd>
+                    </div>
+
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Difficulty</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            @switch(Model.Word.Difficulty)
+                            {
+                                case App.CMS.Data.Enums.WordDifficulty.Easy:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Easy</span>
+                                    break;
+                                case App.CMS.Data.Enums.WordDifficulty.Medium:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Medium</span>
+                                    break;
+                                case App.CMS.Data.Enums.WordDifficulty.Hard:
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Hard</span>
+                                    break;
+                            }
+                        </dd>
+                    </div>
+
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Created At</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">@Model.Word.CreatedAt.ToString("MMMM dd, yyyy HH:mm")</dd>
+                    </div>
+
+                    @if (Model.Word.UpdatedAt.HasValue)
+                    {
+                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">Last Updated</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">@Model.Word.UpdatedAt.Value.ToString("MMMM dd, yyyy HH:mm")</dd>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Word.CreatedByUserName))
+                    {
+                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">Created By</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">@Model.Word.CreatedByUserName</dd>
+                        </div>
+                    }
+                </dl>
+            </div>
+        </div>
+
+        @if (Model.Word.Translations != null && Model.Word.Translations.Any())
+        {
+            <div class="mt-6 bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg font-medium text-gray-900">Translations</h3>
+                </div>
+                <div class="border-t border-gray-200">
+                    <div class="max-h-96 overflow-y-auto">
+                        @foreach (var translation in Model.Word.Translations.OrderBy(t => t.Language))
+                        {
+                            <div class="px-4 py-4 sm:px-6 border-b border-gray-100">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h4 class="text-sm font-semibold text-gray-900">@translation.Language</h4>
+                                        <p class="mt-1 text-sm text-gray-900">@translation.TranslatedText</p>
+                                        @if (!string.IsNullOrEmpty(translation.Pronunciation))
+                                        {
+                                            <p class="text-xs text-gray-600 mt-1">Pronunciation: @translation.Pronunciation</p>
+                                        }
+                                        @if (!string.IsNullOrEmpty(translation.Definition))
+                                        {
+                                            <p class="text-sm text-gray-700 mt-1">Definition: @translation.Definition</p>
+                                        }
+                                        @if (!string.IsNullOrEmpty(translation.UsageExample))
+                                        {
+                                            <p class="text-sm text-gray-600 italic mt-1">Example: "@translation.UsageExample"</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

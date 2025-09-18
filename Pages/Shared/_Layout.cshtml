@@ -23,6 +23,23 @@
                             <a asp-page="/Index" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Home</a>
                             <a asp-page="/About" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">About</a>
                             <a asp-page="/Contact" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <div class="relative group">
+                                    <button class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                                        Admin
+                                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    <div class="absolute z-10 hidden group-hover:block w-48 bg-gray-800 rounded-md shadow-lg py-1 mt-1">
+                                        <a asp-page="/Admin/Categories/Index" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Categories</a>
+                                        <a asp-page="/Admin/Words/Index" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Words</a>
+                                        <a asp-page="/Admin/Users/Index" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Users</a>
+                                        <a asp-page="/Admin/Media/Index" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Media</a>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
