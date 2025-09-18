@@ -8,6 +8,7 @@ using App.CMS.Features.Categories.Queries.GetAllCategories;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using App.CMS.Data.Enums;
+using App.CMS.Features.Words.DTOs;
 
 namespace App.CMS.Pages.Admin.Words;
 
@@ -41,11 +42,34 @@ public class CreateModel : PageModel
         public WordStatus Status { get; set; } = WordStatus.Draft;
 
         public WordDifficulty Difficulty { get; set; } = WordDifficulty.Medium;
+
+        public List<TranslationInputModel> Translations { get; set; } = new();
+    }
+
+    public class TranslationInputModel
+    {
+        public Language Language { get; set; }
+
+        [StringLength(500)]
+        public string TranslatedText { get; set; } = string.Empty;
+
+        [StringLength(200)]
+        public string? Pronunciation { get; set; }
+
+        [StringLength(1500)]
+        public string Definition { get; set; } = string.Empty;
+
+        [StringLength(1000)]
+        public string? UsageExample { get; set; }
+
+        [StringLength(1000)]
+        public string? Notes { get; set; }
     }
 
     public async Task OnGetAsync()
     {
         await LoadCategories();
+        InitializeTranslations();
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -67,7 +91,18 @@ public class CreateModel : PageModel
                 CategoryId = Input.CategoryId,
                 Status = Input.Status,
                 Difficulty = Input.Difficulty,
-                CreatedByUserId = string.IsNullOrEmpty(userId) ? null : Guid.Parse(userId)
+                CreatedByUserId = string.IsNullOrEmpty(userId) ? null : Guid.Parse(userId),
+                Translations = Input.Translations
+                    .Where(t => !string.IsNullOrWhiteSpace(t.TranslatedText) || !string.IsNullOrWhiteSpace(t.Definition))
+                    .Select(t => new TranslationDto
+                    {
+                        Language = t.Language,
+                        TranslatedText = t.TranslatedText,
+                        Pronunciation = t.Pronunciation,
+                        Definition = t.Definition,
+                        UsageExample = t.UsageExample,
+                        Notes = t.Notes
+                    }).ToList()
             };
 
             await _mediator.Send(command);
@@ -89,14 +124,26 @@ public class CreateModel : PageModel
             nameof(Features.Categories.DTOs.CategoryDto.Name));
     }
 
-    private List<string> ParseCommaSeparatedList(string? input)
+    private void InitializeTranslations()
     {
-        if (string.IsNullOrWhiteSpace(input))
-            return new List<string>();
+        var languages = Enum.GetValues<Language>();
 
-        return input.Split(',')
-            .Select(s => s.Trim())
-            .Where(s => !string.IsNullOrEmpty(s))
-            .ToList();
+        foreach (var language in languages)
+        {
+            Input.Translations.Add(new TranslationInputModel
+            {
+                Language = language,
+                TranslatedText = string.Empty,
+                Pronunciation = string.Empty,
+                Definition = string.Empty,
+                UsageExample = string.Empty,
+                Notes = string.Empty
+            });
+        }
+    }
+
+    public string GetLanguageDisplayName(Language language)
+    {
+        return language.ToString();
     }
 }

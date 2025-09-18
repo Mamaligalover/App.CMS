@@ -21,6 +21,7 @@ public class DashboardModel : PageModel
     public int UserCount { get; set; }
     public int CategoryCount { get; set; }
     public int MediaCount { get; set; }
+    public int WordCount { get; set; }
     public List<RecentContentDto> RecentContent { get; set; } = new();
 
     public async Task<IActionResult> OnGetAsync()
@@ -31,6 +32,7 @@ public class DashboardModel : PageModel
             UserCount = await _context.Users.CountAsync();
             CategoryCount = await _context.Categories.CountAsync();
             MediaCount = await _context.Media.CountAsync();
+            WordCount = await _context.Words.CountAsync();
 
             // Clear recent content since Content entity is removed
             RecentContent = new List<RecentContentDto>();
